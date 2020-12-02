@@ -3,8 +3,11 @@ const https = require('https');
 
 const app = express();
 
-app.get('/', function(req, res){
-  const url = 'http://api.openweathermap.org/data/2.5/weather?q=Incheon&appid=02e441a38cd4dea2f66af42e94f8dc29&units=metric';
+app.post('/', (req, res) => {
+  const query = req.body.cityName;
+  const apiKey = '02e441a38cd4dea2f66af42e94f8dc29';
+  const unit = 'metric';
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&appid=${apiKey}&units=${unit}&lang=kr`;
 
   https.get(url, (response)=>{
     console.log( 'https에러코드: ' + response.statusCode); // http 에러코드 
@@ -13,10 +16,18 @@ app.get('/', function(req, res){
       const weatherData = JSON.parse(data);
       const temp = weatherData.main.temp;
       const weatherDescription = weatherData.weather[0].description;
-      console.log(temp);
-      console.log(weatherDescription);
+      const weatherIcon = weatherData.weather[0].icon;
+      const weatherIconUrl = `http://openweathermap.org/img/wn/${weatherIcon}@2x.png`;
+      
+      res.writeHead(200, {'Content-Type': 'text/html; charset=UTF-8'});
+      res.write(`<h1>오늘의 ${query} 날씨 브리핑</h1>`);
+      res.write(`<img src='${weatherIconUrl}'><p>`)
+      res.write('<p>오늘의 하늘은 ' + weatherDescription + '<p>');
+      res.write('오늘의 기온은 섭씨 ' + temp + '도'); // 한글쓰면 깨지는 이유는?!
+      res.send();
     })
   })
+})
 
 app.listen(3000, function(){
   console.log('server is running on port 3000');
