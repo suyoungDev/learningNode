@@ -1,7 +1,15 @@
 const express = require('express');
 const https = require('https');
+const bodyParser = require('body-parser');
+const { report } = require('process');
 
 const app = express();
+
+app.use(bodyParser.urlencoded({extended: true}));
+
+app.get('/', function(req, res){
+  res.sendFile(__dirname + '/index.html')
+});
 
 app.post('/', (req, res) => {
   const query = req.body.cityName;
@@ -29,6 +37,8 @@ app.post('/', (req, res) => {
   })
 })
 
-app.listen(3000, function(){
-  console.log('server is running on port 3000');
+
+app.listen(3000, ()=>{
+  console.log(`port 3000`);
 })
+
