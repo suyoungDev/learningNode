@@ -10,3 +10,5 @@ front-end가 아닌 back-end..서버에서 계산하여 값을 리턴한다.
 `html`의 `input`이 서버로 전송한 데이터를
 `bodyParser`로 가져와서`(app.get)` 데이터를 조작 할 수 `(app.post)`  있다. 
 
+\
+깃허브가 어색해서 파일정리가 하나도 안되어있다...sad...
